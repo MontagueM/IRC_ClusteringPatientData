@@ -1,2 +1,2 @@
 # IRC_ClusteringPatientData
-Clustering patient data using k-means clustering methods
+Clustering patient data using Support Vector Machine (SVM)
