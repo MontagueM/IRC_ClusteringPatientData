@@ -1,2 +1,2 @@
 # IRC_ClusteringPatientData
-Clustering patient data using k-means clustering methods
+Clustering patient data for diagnosis using the Support Vector Machine (SVM) learning method. The project is part of an Interdisciplinary Research Computing project for Imperial College London's Horizons course.
