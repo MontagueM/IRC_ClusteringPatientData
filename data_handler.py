@@ -20,8 +20,8 @@ def get_data():
     df = pd.read_csv('heart.csv')
     desired_cols = [
         'age',
-        'sex',
         'trestbps',
+        'sex',
         'target'
     ]
     df = df[df.columns.intersection(desired_cols)]
@@ -29,7 +29,8 @@ def get_data():
     features = [df[x].tolist() for x in desired_cols[:-1]]
     feat = [[features[i][j] for i in range(len(features))] for j in range(len(features[0]))]
     labels = df[desired_cols[-1]].tolist()
-    return feat, labels
+    feat_names = desired_cols[:-1]
+    return feat_names, feat, labels
 
 
 def split_data(features, labels):
@@ -48,5 +49,5 @@ def split_data(features, labels):
     return training_features, training_labels, test_features, test_labels
 
 
-if __name__ == '__main__':
-    features, labels = get_data()
+def k_fold_cross_validation():
+    pass
