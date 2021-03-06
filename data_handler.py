@@ -1,4 +1,6 @@
 import pandas as pd
+import random
+from sklearn.utils import shuffle
 
 """
 This version of data_handler will just be using the kaggle, already-cleaned dataset so we can start work without
@@ -28,6 +30,22 @@ def get_data():
     feat = [[features[i][j] for i in range(len(features))] for j in range(len(features[0]))]
     labels = df[desired_cols[-1]].tolist()
     return feat, labels
+
+
+def split_data(features, labels):
+    # The .csv data comes pre-sorted so we need to shuffle the data around
+    features, labels = shuffle(features, labels)
+
+    length = len(features)
+    testing_ratio = 0.2
+
+    # Separating the data into required arrays based on the ratio above
+    training_features = features[int(length * testing_ratio):]
+    training_labels = labels[int(length * testing_ratio):]
+    test_features = features[:int(length * testing_ratio)]
+    test_labels = labels[:int(length * testing_ratio)]
+
+    return training_features, training_labels, test_features, test_labels
 
 
 if __name__ == '__main__':
