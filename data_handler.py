@@ -1,7 +1,8 @@
 import pandas as pd
-import random
+import random 
 from sklearn.utils import shuffle
-
+from sklearn.model_selection import cross_val_score
+from sklearn import svm
 """
 This version of data_handler will just be using the kaggle, already-cleaned dataset so we can start work without
 needing to wait for the data to be fully cleaned from the original UCI dataset.
@@ -49,5 +50,10 @@ def split_data(features, labels):
     return training_features, training_labels, test_features, test_labels
 
 
-def k_fold_cross_validation():
-    pass
+def k_fold_cross_validation(k, kernel, features, labels):
+    #kernel specifies which kernel you want it's a string "linear","rfb" etc.
+    #k is how many folds u want in the data we'll probably use 5 fold
+    
+    clf = svm.SVC(kernel=kernel, random_state=69)
+    scores = cross_val_score(clf, features, labels, cv=k)
+    return scores 
