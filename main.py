@@ -17,7 +17,7 @@ if __name__ == '__main__':
     accuracy = model.get_accuracy(test_labels, predictions)
 
     #uncomment to get 5 cross validation scores
-    #scores = data_handler.k_fold_cross_validation(k=10, kernel= 'linear',features=features,labels=labels)
+    #scores = data_handler.k_fold_cross_validation(k=5, kernel= 'linear',features=features,labels=labels)
     #print(scores)
     
     #^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
