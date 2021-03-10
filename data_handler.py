@@ -2,6 +2,7 @@ import pandas as pd
 import random 
 from sklearn.utils import shuffle
 from sklearn.model_selection import cross_val_score
+from sklearn.preprocessing import MinMaxScaler
 from sklearn import svm
 """
 This version of data_handler will just be using the kaggle, already-cleaned dataset so we can start work without
@@ -28,10 +29,18 @@ def get_data():
     df = df[df.columns.intersection(desired_cols)]
     # Forming a feature/label array for ease of use with svm. Code is not nice but basically just converts to two arrays of the relevant features and labels needed for SVM classification
     features = [df[x].tolist() for x in desired_cols[:-1]]
+    features = [normalise_data(x) for x in features]
     feat = [[features[i][j] for i in range(len(features))] for j in range(len(features[0]))]
     labels = df[desired_cols[-1]].tolist()
     feat_names = desired_cols[:-1]
     return feat_names, feat, labels
+
+
+def normalise_data(data):
+    mind = min(data)
+    maxd = max(data)
+    norm = [(x - mind)/(maxd-mind) for x in data]
+    return norm
 
 
 def split_data(features, labels):
@@ -56,4 +65,4 @@ def k_fold_cross_validation(k, kernel, features, labels):
     
     clf = svm.SVC(kernel=kernel, random_state=69)
     scores = cross_val_score(clf, features, labels, cv=k)
-    return scores 
+    return scores
