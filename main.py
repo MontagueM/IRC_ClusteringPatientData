@@ -31,7 +31,6 @@ if __name__ == '__main__':
     #uncomment to get 5 cross validation scores
     #scores = data_handler.k_fold_cross_validation(k=5, kernel= 'linear',features=features,labels=labels)
     #print(scores)
-    cv = 
 
 
     #model.auc_plot(test_features, test_labels)
