@@ -4,6 +4,8 @@ from sklearn.utils import shuffle
 from sklearn.model_selection import cross_val_score
 from sklearn.preprocessing import MinMaxScaler
 from sklearn import svm
+import matplotlib.pyplot as plt
+import seaborn as sns
 """
 This version of data_handler will just be using the kaggle, already-cleaned dataset so we can start work without
 needing to wait for the data to be fully cleaned from the original UCI dataset.
@@ -66,3 +68,10 @@ def k_fold_cross_validation(k, kernel, features, labels):
     clf = svm.SVC(kernel=kernel, random_state=69)
     scores = cross_val_score(clf, features, labels, cv=k)
     return scores
+
+# def get_heatmap():
+#     df = pd.read_csv('heart.csv')
+#     plt.figure(figsize=(12,10))
+#     sns.heatmap(df.corr(), linewidths=0.05, fmt= ".2f", annot=True)
+#     plt.title("Correlation Plot")
+#     plt.show()
