@@ -1,4 +1,4 @@
-
+import requests
 import pandas as pd
 import random 
 from sklearn.utils import shuffle
@@ -51,32 +51,41 @@ def pull_data_from_db():
     # Can use pandas dataframes if we want
     df = pd.DataFrame(all_data, columns=columns)
     return all_data, df
-  
+
+
 def clean_df(df):
-  # The following code is from the Jupyter Notebook by Avani and Lok
-  df = df[df.fbs != '?']
-  df=df[df.restecg!='?']
-  df = df[df.chol != '?'].dropna()
-  df=df[df.thalanch!='?'].dropna()
-  df=df[df.exang!='?'].dropna()
-  df=df[df.trestbps!='?'].dropna()
-  df=df[df.trestbps>10]
-  df=df[df.thalanch>60]
-  df=df[df.chol!='?']
-  df=df.drop(columns=['slope','ca','thal'])
-  df=df[df.trestbps>50]
-  df.thalanch=df.thalanch.astype('float64')
-  return df
+    # The following code is from the Jupyter Notebook by Avani and Lok
+    df = df[df.fbs != '?']
+    df=df[df.restecg!='?']
+    df = df[df.chol != '?'].dropna()
+    df=df[df.thalanch!='?'].dropna()
+    df=df[df.exang!='?'].dropna()
+    df=df[df.trestbps!='?'].dropna()
+    df=df[df.oldpeak!='?'].dropna()
+
+    df=df[df.trestbps>10]
+    df=df[df.thalanch>60]
+    df=df[df.chol!='?']
+    df=df.drop(columns=['slope','ca','thal'])
+    df=df[df.trestbps>50]
+    df.thalanch=df.thalanch.astype('float64')
+
+    # Converting to binary feature
+    df.num = [int(x > 0) for x in df.num]
+
+    return df
+
 
 def get_data():
     _, df = pull_data_from_db()
     df = clean_df(df)
-    features = [df[x].tolist() for x in desired_cols[:-1]]
+    features = [df[x].tolist() for x in df.columns[:-1]]
     features = [normalise_data(x) for x in features]
     feat = [[features[i][j] for i in range(len(features))] for j in range(len(features[0]))]
-    labels = df[desired_cols[-1]].tolist()
-    feat_names = desired_cols[:-1]
+    labels = df['num'].tolist()
+    feat_names = df.columns[:-1]
     return feat_names, feat, labels
+
 
 def normalise_data(data):
     mind = min(data)
