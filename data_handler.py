@@ -37,6 +37,23 @@ def pull_data_from_db():
     return all_data, df
 
 
+def clean_df(df):
+    # The following code is from the Jupyter Notebook by Avani and Lok
+    df = df[df.fbs != '?']
+    df=df[df.restecg!='?']
+    df = df[df.chol != '?'].dropna()
+    df=df[df.thalanch!='?'].dropna()
+    df=df[df.exang!='?'].dropna()
+    df=df[df.trestbps!='?'].dropna()
+    df=df[df.trestbps>10]
+    df=df[df.thalanch>60]
+    df=df[df.chol!='?']
+    df=df.drop(columns=['slope','ca','thal'])
+    df=df[df.trestbps>50]
+    df.thalanch=df.thalanch.astype('float64')
+    return df
+
+
 def get_data():
     """
     Primary function. Handles:
@@ -47,7 +64,8 @@ def get_data():
     """
     # Gets data in an array form (all_data) and Pandas DataFrame form (df)
     all_data, df = pull_data_from_db()
-
+    df = clean_df(df)
+    return df
 
 
 if __name__ == '__main__':
