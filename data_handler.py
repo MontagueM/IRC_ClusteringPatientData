@@ -1,3 +1,4 @@
+
 import pandas as pd
 import random 
 from sklearn.utils import shuffle
@@ -8,10 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 """
-This version of data_handler will just be using the kaggle, already-cleaned dataset so we can start work without
-needing to wait for the data to be fully cleaned from the original UCI dataset.
-
-Dataset heart.csv will only be used temporarily, attributes:
+Dataset attributes:
     Hungarian Institute of Cardiology. Budapest: Andras Janosi, M.D.
     University Hospital, Zurich, Switzerland: William Steinbrunn, M.D.
     University Hospital, Basel, Switzerland: Matthias Pfisterer, M.D.
@@ -21,23 +19,65 @@ Dataset heart.csv will only be used temporarily, attributes:
 """
 
 
-def get_data():
-    df = pd.read_csv('heart.csv')
-    desired_cols = [
-        'age',
-        'trestbps',
-        'sex',
-        'target'
+def pull_data_from_db():
+    """
+    Pulls data from online UCI databases and collates them
+    """
+    base_data_url = 'https://archive.ics.uci.edu/ml/machine-learning-databases/heart-disease/'
+    # Pulling processed data as it is in the most usable format but still needs to be cleaned (missing data)
+    options = [
+        'processed.cleveland.data',
+        'processed.hungarian.data',
+        'processed.switzerland.data',
+        'processed.va.data',
     ]
-    df = df[df.columns.intersection(desired_cols)]
-    # Forming a feature/label array for ease of use with svm. Code is not nice but basically just converts to two arrays of the relevant features and labels needed for SVM classification
+    columns = [
+        'age', 'sex', 'cp', 'trestbps', 'chol', 'fbs', 'restecg', 'thalanch', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'num'
+    ]
+
+    # This chunk parses the online data into float arrays where it can and adds it to all_data together
+    all_data = []
+    for o in options:
+        req = requests.get(base_data_url + o)
+        if req.status_code != 200:
+            raise requests.exceptions.ConnectionError(f'Data URL {base_data_url + o} invalid. Please check the URL is valid.')
+        content = [y.split(',') for y in req.content.decode('utf-8').split('\n') if len(y) > 1]
+        for i in range(len(content)):
+            for j in range(len(content[i])):
+                if content[i][j] == '?':
+                    continue
+                content[i][j] = float(content[i][j])
+        all_data.extend(content)
+
+    # Can use pandas dataframes if we want
+    df = pd.DataFrame(all_data, columns=columns)
+    return all_data, df
+  
+def clean_df(df):
+  # The following code is from the Jupyter Notebook by Avani and Lok
+  df = df[df.fbs != '?']
+  df=df[df.restecg!='?']
+  df = df[df.chol != '?'].dropna()
+  df=df[df.thalanch!='?'].dropna()
+  df=df[df.exang!='?'].dropna()
+  df=df[df.trestbps!='?'].dropna()
+  df=df[df.trestbps>10]
+  df=df[df.thalanch>60]
+  df=df[df.chol!='?']
+  df=df.drop(columns=['slope','ca','thal'])
+  df=df[df.trestbps>50]
+  df.thalanch=df.thalanch.astype('float64')
+  return df
+
+def get_data():
+    _, df = pull_data_from_db()
+    df = clean_df(df)
     features = [df[x].tolist() for x in desired_cols[:-1]]
     features = [normalise_data(x) for x in features]
     feat = [[features[i][j] for i in range(len(features))] for j in range(len(features[0]))]
     labels = df[desired_cols[-1]].tolist()
     feat_names = desired_cols[:-1]
     return feat_names, feat, labels
-
 
 def normalise_data(data):
     mind = min(data)
