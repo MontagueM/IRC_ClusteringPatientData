@@ -96,7 +96,7 @@ def normalise_data(data):
 
 def split_data(features, labels):
     # The .csv data comes pre-sorted so we need to shuffle the data around
-    features, labels = shuffle(features, labels)
+    features, labels = shuffle(features, labels, random_state=69)
 
     length = len(features)
     testing_ratio = 0.2

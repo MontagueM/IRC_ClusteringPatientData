@@ -2,7 +2,7 @@ import data_handler
 import model
 import graph
 import numpy as np
-from sklearn.metrics import plot_roc_curve
+from sklearn.metrics import plot_roc_curve, precision_recall_curve, plot_precision_recall_curve
 import matplotlib.pyplot as plt
 
 if __name__ == '__main__':
@@ -19,14 +19,16 @@ if __name__ == '__main__':
 
     # ROC curve
     svc_disp = plot_roc_curve(svm_model.clf, svm_model.test_features, svm_model.test_labels)
+    plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
+        label='Chance', alpha=.8)
+    plt.title("ROC curve plot")
     plt.show()
    
     # Five-fold cross validation scores
     scores = data_handler.k_fold_cross_validation(k=5, kernel='linear', features=features, labels=labels)
     print(scores)
+    
 
-    # AUC plot
-    svm_model.plot_auc()
 
     # 2D scatter plot
     features = [x[:2] for x in features]
