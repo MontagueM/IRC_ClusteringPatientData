@@ -22,6 +22,7 @@ if __name__ == '__main__':
     plt.plot([0, 1], [0, 1], linestyle='--', lw=2, color='r',
         label='Chance', alpha=.8)
     plt.title("ROC curve plot")
+    plt.savefig('figures/ROC.png')
     plt.show()
    
     # Five-fold cross validation scores

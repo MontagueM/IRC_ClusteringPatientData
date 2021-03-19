@@ -40,6 +40,7 @@ class Model:
         print(metrics.confusion_matrix(self.test_labels, self.predicted_labels))
         sns.heatmap(metrics.confusion_matrix(self.test_labels, self.predicted_labels), annot=True, fmt=".0f", cmap="YlGnBu")
         plt.title("confusion matrix")
+        plt.savefig('figures/confusion_matrix.png')
         plt.show()
 
     def plot_auc(self):
@@ -54,4 +55,5 @@ class Model:
         plt.ylabel("False Positive Rate")
         plt.title("AUC(ROC curve)")
         plt.grid(color='black', linestyle='-', linewidth=0.5)
+        plt.savefig('figures/AUC.png')
         plt.show()
