@@ -7,6 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn import svm
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import sem
+from numpy import mean
 """
 Dataset attributes:
     Hungarian Institute of Cardiology. Budapest: Andras Janosi, M.D.
@@ -116,7 +118,9 @@ def k_fold_cross_validation(k, kernel, features, labels):
     
     clf = svm.SVC(kernel=kernel, random_state=69)
     scores = cross_val_score(clf, features, labels, cv=k)
-    return scores
+    se = sem(scores)
+    mu = mean(scores)
+    return scores, mu , se
 
 # def get_heatmap():
 #     df = pd.read_csv('heart.csv')

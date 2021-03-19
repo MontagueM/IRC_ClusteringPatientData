@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.metrics import plot_roc_curve, precision_recall_curve, plot_precision_recall_curve
 import matplotlib.pyplot as plt
 
+
 if __name__ == '__main__':
     feature_names, features, labels = data_handler.get_data()
 
@@ -25,10 +26,10 @@ if __name__ == '__main__':
     plt.show()
    
     # Five-fold cross validation scores
-    scores = data_handler.k_fold_cross_validation(k=5, kernel='linear', features=features, labels=labels)
+    scores,mean, se = data_handler.k_fold_cross_validation(k=5, kernel='linear', features=features, labels=labels)
     print(scores)
-    
-
+    print(mean)
+    print(se)
 
     # 2D scatter plot
     features = [x[:2] for x in features]
