@@ -125,14 +125,14 @@ def k_fold_cross_validation(k, kernel, features, labels):
 def get_heatmap():
     df = pd.read_csv('heart.csv')
 
-    plt.figure(figsize=(3,6))
+    fig = plt.figure(figsize=(3,6))
     sns.heatmap(df.corr()[["target"]].sort_values(by="target",ascending=False,key=absolute),
                 linewidths=0.05, fmt= ".2f", 
                 annot=True,
                 vmin =-1,vmax=1,
-                cmap=sns.diverging_palette(20, 20, as_cmap=True)
+                cmap=sns.diverging_palette(260, 260, as_cmap=True)
 
 )
     plt.title("Correlation Plot")
     plt.show()
-
+    fig.savefig("figures/heatmap2.png",transparent=True)

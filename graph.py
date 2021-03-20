@@ -36,7 +36,7 @@ def stack_overflow(features, labels, clf, feature_names):
     ax.set_yticks(())
     ax.set_title(title)
     ax.legend()
-    plt.savefig('figures/decision_surface.png')
+    plt.savefig('figures/decision_surface.png',transparent=True)
     plt.show()
 
 # End of stackoverflow code
