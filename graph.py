@@ -34,8 +34,10 @@ def stack_overflow(features, labels, clf, feature_names):
     ax.set_xlabel(feature_names[1])
     ax.set_xticks(())
     ax.set_yticks(())
+    plt.xlim([-0.2, 1.2])
+    plt.ylim([-0.2, 1.2])
     ax.set_title(title)
-    ax.legend()
+    # ax.legend()
     plt.savefig('figures/decision_surface.png',transparent=True)
     plt.show()
 

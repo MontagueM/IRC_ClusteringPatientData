@@ -6,11 +6,12 @@ from sklearn.metrics import roc_curve, roc_auc_score, auc
 
 
 class Model:
-    def __init__(self, train_features, train_labels, test_features, test_labels):
+    def __init__(self, train_features, train_labels, test_features, test_labels, feature_names):
         self.train_features = train_features
         self.train_labels = train_labels
         self.test_features = test_features
         self.test_labels = test_labels
+        self.feature_names = feature_names
 
         self.clf = None
         self.predicted_labels = None
@@ -57,3 +58,13 @@ class Model:
         plt.grid(color='black', linestyle='-', linewidth=0.5)
         plt.savefig('figures/AUC.png',transparent=True)
         plt.show()
+
+    def plot_bar_weights(self):
+        imp, names = zip(*sorted(zip([abs(x) for x in self.clf.coef_[0]], self.feature_names)))
+        plt.barh(range(len(names)), imp, align='center')
+        plt.xlabel('Weight Magnitude')
+        plt.ylabel('Feature')
+        plt.yticks(range(len(names)), names)
+        plt.savefig('figures/bar_weights.png', transparent=True)
+        plt.show()
+        a = 0
